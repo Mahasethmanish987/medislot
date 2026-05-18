@@ -15,8 +15,11 @@ class UserService:
             last_name: str, 
             phone_number: str, 
             role: int , 
-            password: str = None
+            password: str , 
+            confirm_password: str
     ) -> User:
+        if confirm_password != password:
+            raise ValueError("Passwords do not match.")
         user = User.objects.create_user(
             email=email,
             username=username,

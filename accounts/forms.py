@@ -3,8 +3,33 @@ from .models import User
 
 
 class UserRegistrationForm(forms.ModelForm): 
-    password = forms.CharField(widget=forms.PasswordInput)
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        "class": "w-full p-2 border rounded"
+    }))
+    
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "w-full p-2 border rounded"
+    }))
+    
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "w-full p-2 border rounded"
+    }))
+    
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "w-full p-2 border rounded"
+    }))
+    
+    phone_number = forms.CharField(widget=forms.TextInput(attrs={
+        "class": "w-full p-2 border rounded"
+    }))
+    
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "class": "w-full p-2 border rounded"
+    }))
+    
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "class": "w-full p-2 border rounded"
+    }))
 
     class Meta: 
         model = User
