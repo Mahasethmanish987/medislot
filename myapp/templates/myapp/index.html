@@ -1,0 +1,179 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Home | MediSlot{% endblock %}
+
+{% block css %}
+
+<style>
+
+/* ===== GLOBAL SMOOTHNESS ===== */
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: #f8fafc;
+    color: #1f2937;
+}
+
+/* ===== HERO SECTION ===== */
+.hero-title {
+    animation: fadeInUp 0.8s ease-out;
+    letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Smooth animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+.btn-dark {
+    background: #111827;
+    color: white;
+    padding: 10px 22px;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+
+.btn-dark:hover {
+    background: #000;
+    transform: translateY(-2px);
+}
+
+/* ===== FEATURE CARDS ===== */
+.feature-card {
+    background: white;
+    border-radius: 14px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+    border-color: #dbeafe;
+}
+
+/* Feature title */
+.feature-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Feature text */
+.feature-card p {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* ===== SECTION SPACING ===== */
+section {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+/* ===== CONTAINER IMPROVEMENT ===== */
+.container {
+    max-width: 1100px;
+}
+
+/* ===== HOVER LINKS ===== */
+a {
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    opacity: 0.9;
+}
+
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+<!-- Hero Section -->
+<section class="bg-gray-100 py-16">
+    <div class="container mx-auto text-center px-6">
+
+        <h1 class="text-4xl font-bold text-gray-800 hero-title">
+            Welcome to MediSlot
+        </h1>
+
+        <p class="text-gray-600 mt-4">
+            Book doctor appointments easily and manage your health in one place.
+        </p>
+
+        <div class="mt-6 space-x-4">
+
+            <a href="#"
+               class="bg-blue-600 text-white px-6 py-2 rounded btn-glow hover:bg-blue-700">
+                Find Doctors
+            </a>
+
+            <a href="#"
+               class="bg-gray-800 text-white px-6 py-2 rounded hover:bg-black">
+                Book Appointment
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16">
+    <div class="container mx-auto px-6 grid md:grid-cols-3 gap-8 text-center">
+
+        <div class="p-6 shadow rounded feature-card">
+            <h3 class="text-xl font-bold">Easy Booking</h3>
+            <p class="text-gray-600 mt-2">
+                Book doctor slots in seconds.
+            </p>
+        </div>
+
+        <div class="p-6 shadow rounded feature-card">
+            <h3 class="text-xl font-bold">Real-Time Slots</h3>
+            <p class="text-gray-600 mt-2">
+                Live availability updates.
+            </p>
+        </div>
+
+        <div class="p-6 shadow rounded feature-card">
+            <h3 class="text-xl font-bold">Notifications</h3>
+            <p class="text-gray-600 mt-2">
+                Instant booking alerts.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
