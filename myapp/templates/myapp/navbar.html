@@ -1,55 +1,103 @@
-<nav class="bg-gray-900 text-white px-6 py-4 shadow-md">
-    <div class="flex justify-between items-center">
-
-        <!-- Brand -->
-        <a class="text-2xl font-bold tracking-wide" href="#">
-            MediSlot
-        </a>
-
-        <!-- Menu -->
-        <div class="flex space-x-6 items-center">
-
+<nav class="bg-gray-900 text-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4 sm:px-6">
+        <div class="flex justify-between items-center py-4">
+            
+            <!-- Brand -->
+            <a class="text-2xl font-bold tracking-wide hover:text-blue-400 transition" href="/">
+                MediSlot
+            </a>
+            
+            <!-- Desktop Menu (hidden on mobile) -->
+            <div class="hidden md:flex space-x-6 items-center">
+                {% if user.is_authenticated %}
+                    <a class="hover:text-blue-400 transition" href="">
+                        Appointments
+                    </a>
+                    <a class="relative hover:text-blue-400 transition" href="">
+                        <i class="fas fa-bell"></i>
+                        <span id="notif-count" class="absolute -top-2 -right-3 bg-red-500 text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
+                            0
+                        </span>
+                    </a>
+                    <a class="hover:text-blue-400 transition" href="">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <form method="POST" action="{% url 'accounts:user_logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:text-red-400 transition bg-transparent border-0 cursor-pointer">
+                            Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <a class="hover:text-blue-400 transition" href="{% url 'accounts:user_register' %}">
+                        Register
+                    </a>
+                    <a class="hover:text-blue-400 transition" href="{% url 'accounts:user_login' %}">
+                        Login
+                    </a>
+                {% endif %}
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu (hidden by default) -->
+        <div id="mobile-menu" class="md:hidden hidden pb-4 space-y-3">
             {% if user.is_authenticated %}
-
-                <!-- Appointments -->
-                <a class="hover:text-blue-400 transition" href="#">
+                <a class="block hover:text-blue-400 transition" href="">
                     Appointments
                 </a>
-
-                <!-- Notifications -->
-                <a class="relative hover:text-blue-400 transition" href="#">
-                    <i class="fas fa-bell"></i>
-
-                    <span id="notif-count"
-                          class="absolute -top-2 -right-3 bg-red-500 text-xs rounded-full px-2">
+                <a class="block hover:text-blue-400 transition" href="">
+                    Notifications
+                    <span id="mobile-notif-count" class="bg-red-500 text-xs rounded-full px-1.5 py-0.5 ml-2">
                         0
                     </span>
                 </a>
-
-                <!-- Profile -->
-                <a class="hover:text-blue-400 transition" href="#">
-                    <i class="fas fa-user"></i>
+                <a class="block hover:text-blue-400 transition" href="">
+                    Profile
                 </a>
-
-                <!-- Logout -->
-                <a class="hover:text-red-400 transition" href="#">
-                    Logout
-                </a>
-
+                <form method="POST" action="{% url 'accounts:user_logout' %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="hover:text-red-400 transition bg-transparent border-0 cursor-pointer">
+                        Logout
+                    </button>
+                </form>
             {% else %}
-
-                <!-- Register -->
-                <a class="hover:text-blue-400 transition" href="#">
+                <a class="block hover:text-blue-400 transition" href="{% url 'accounts:user_register' %}">
                     Register
                 </a>
-
-                <!-- Login -->
-                <a class="hover:text-blue-400 transition" href="#">
+                <a class="block hover:text-blue-400 transition" href="{% url 'accounts:user_login' %}">
                     Login
                 </a>
-
             {% endif %}
-
         </div>
     </div>
 </nav>
+
+<script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+    
+    // Optional: Sync notification count (update both desktop and mobile)
+    function updateNotificationCount(count) {
+        const desktopBadge = document.getElementById('notif-count');
+        const mobileBadge = document.getElementById('mobile-notif-count');
+        if (desktopBadge) desktopBadge.textContent = count;
+        if (mobileBadge) mobileBadge.textContent = count;
+    }
+    
+    // Example: fetch notification count via HTMX or API
+    // htmx.ajax('GET', '/notifications/count/', {target: '#notif-count', swap: 'outerHTML'});
+</script>

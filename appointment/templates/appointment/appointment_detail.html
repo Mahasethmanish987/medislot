@@ -1,0 +1,90 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Appointment Details | MediSlot{% endblock %}
+
+{% block body %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-4">
+            <h1 class="text-2xl font-bold text-white">Appointment Details</h1>
+        </div>
+
+        <div class="p-6">
+            <!-- Doctor Info -->
+            <div class="flex items-center gap-4 pb-4 border-b border-gray-100">
+                {% if appointment.doctor.profile_picture %}
+                    <img src="{{ appointment.doctor.profile_picture.url }}" alt="Dr. {{ appointment.doctor.user.get_full_name }}" class="w-16 h-16 rounded-full object-cover">
+                {% else %}
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl font-bold">
+                        {{ appointment.doctor.user.first_name|first|upper }}{{ appointment.doctor.user.last_name|first|upper }}
+                    </div>
+                {% endif %}
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">Dr. {{ appointment.doctor.user.get_full_name }}</h2>
+                    <p class="text-blue-600">{{ appointment.doctor.department.name|default:"General Medicine" }}</p>
+                </div>
+            </div>
+
+            <!-- Patient Info -->
+            <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                <p class="text-xs text-gray-500 uppercase">Patient</p>
+                <p class="font-semibold text-gray-800">{{ appointment.patient.get_full_name|default:appointment.patient.username }}</p>
+                <p class="text-sm text-gray-600">{{ appointment.patient.email }}</p>
+            </div>
+
+            <!-- Appointment Details Grid -->
+            <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-xs text-blue-600 uppercase">Date</p>
+                    <p class="font-semibold text-gray-800">{{ appointment.date|date:"l, d F Y" }}</p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-xs text-blue-600 uppercase">Time</p>
+                    <p class="font-semibold text-gray-800">{{ appointment.start_time|time:"g:i A" }} – {{ appointment.end_time|time:"g:i A" }}</p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-xs text-blue-600 uppercase">Queue Number</p>
+                    <p class="font-semibold text-gray-800">#{{ appointment.queue_number }}</p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-xs text-blue-600 uppercase">Status</p>
+                    <p class="font-semibold">
+                        {% if appointment.status == 'pending' %}
+                            <span class="text-yellow-600">Pending</span>
+                        {% elif appointment.status == 'completed' %}
+                            <span class="text-green-600">Completed</span>
+                        {% else %}
+                            <span class="text-red-600">Cancelled</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-xs text-blue-600 uppercase">Consultation Fee</p>
+                    <p class="font-semibold text-gray-800">${{ appointment.doctor.consultation_fee|default:"80" }}</p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-xs text-blue-600 uppercase">Booked On</p>
+                    <p class="font-semibold text-gray-800">{{ appointment.created_at|date:"d M Y, h:i A" }}</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-6 flex flex-wrap gap-3">
+                <a href="{% url 'doctor:doctor_public_profile' appointment.doctor.id %}" class="flex-1 text-center border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold py-2 rounded-lg transition">
+                    View Doctor Profile
+                </a>
+                {% if appointment.status == 'pending' and appointment.patient == request.user %}
+                    <!-- Cancel button – you can implement later -->
+                    <button disabled class="flex-1 text-center bg-red-100 text-red-400 font-semibold py-2 rounded-lg cursor-not-allowed">
+                        Cancel (Coming Soon)
+                    </button>
+                {% endif %}
+            </div>
+
+            <!-- Back link -->
+           
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -26,9 +26,10 @@ class UserService:
             first_name=first_name,
             last_name=last_name,
             phone_number=phone_number,
-            role=role,
             password=password
         )
+        user.role = role
+        user.save()
         return user 
 
     @transaction.atomic 

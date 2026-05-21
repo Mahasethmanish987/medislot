@@ -4,176 +4,269 @@
 {% block title %}Home | MediSlot{% endblock %}
 
 {% block css %}
-
 <style>
-
-/* ===== GLOBAL SMOOTHNESS ===== */
-body {
-    font-family: "Open Sans", sans-serif;
-    background-color: #f8fafc;
-    color: #1f2937;
-}
-
-/* ===== HERO SECTION ===== */
-.hero-title {
-    animation: fadeInUp 0.8s ease-out;
-    letter-spacing: -0.5px;
-}
-
-.hero-subtitle {
-    animation: fadeInUp 1s ease-out;
-}
-
-/* Smooth animation */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
+    /* ===== GLOBAL SMOOTHNESS ===== */
+    body {
+        font-family: "Open Sans", sans-serif;
+        background-color: #f8fafc;
+        color: #1f2937;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    /* ===== HERO SECTION ===== */
+    .hero-section {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        position: relative;
+        overflow: hidden;
     }
-}
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3CradialGradient id='a' gradientUnits='objectBoundingBox'%3E%3Cstop offset='0' stop-color='%233b82f6' stop-opacity='0.15'/%3E%3Cstop offset='1' stop-color='%233b82f6' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect fill='%230f172a' width='2000' height='1500'/%3E%3Ccircle cx='500' cy='300' r='400' fill='url(%23a)'/%3E%3Ccircle cx='1500' cy='1100' r='500' fill='url(%23a)'/%3E%3C/svg%3E");
+        opacity: 0.3;
+        pointer-events: none;
+    }
+    .hero-title {
+        animation: fadeInUp 0.8s ease-out;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .hero-subtitle {
+        animation: fadeInUp 1s ease-out;
+        animation-delay: 0.1s;
+        animation-fill-mode: both;
+    }
+    .hero-buttons {
+        animation: fadeInUp 1.2s ease-out;
+        animation-delay: 0.2s;
+        animation-fill-mode: both;
+    }
 
-/* ===== BUTTONS ===== */
-.btn-primary {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: white;
-    padding: 10px 22px;
-    border-radius: 10px;
-    transition: all 0.25s ease;
-    display: inline-block;
-    font-weight: 500;
-}
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(25px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
-}
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        padding: 12px 28px;
+        border-radius: 40px;
+        transition: all 0.3s ease;
+        display: inline-block;
+        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    }
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+    .btn-outline {
+        background: transparent;
+        border: 2px solid white;
+        color: white;
+        padding: 10px 26px;
+        border-radius: 40px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+        background: white;
+        color: #1e3a8a;
+        transform: translateY(-3px);
+    }
 
-.btn-dark {
-    background: #111827;
-    color: white;
-    padding: 10px 22px;
-    border-radius: 10px;
-    transition: all 0.25s ease;
-}
+    /* ===== FEATURE CARDS ===== */
+    .feature-card {
+        background: white;
+        border-radius: 24px;
+        padding: 32px 24px;
+        transition: all 0.3s ease;
+        border: 1px solid #eef2ff;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.02);
+    }
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
+        border-color: #c7d2fe;
+    }
+    .feature-icon {
+        background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+        width: 64px;
+        height: 64px;
+        border-radius: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+    .feature-icon svg {
+        width: 32px;
+        height: 32px;
+        stroke: #1e3a8a;
+        stroke-width: 1.5;
+    }
+    .feature-card h3 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+    .feature-card p {
+        font-size: 0.95rem;
+        color: #475569;
+        line-height: 1.5;
+    }
 
-.btn-dark:hover {
-    background: #000;
-    transform: translateY(-2px);
-}
+    /* Statistics */
+    .stat-card {
+        background: white;
+        border-radius: 20px;
+        padding: 24px 16px;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+        border: 1px solid #eef2ff;
+    }
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #2563eb;
+        line-height: 1;
+    }
 
-/* ===== FEATURE CARDS ===== */
-.feature-card {
-    background: white;
-    border-radius: 14px;
-    padding: 25px;
-    transition: all 0.3s ease;
-    border: 1px solid #e5e7eb;
-}
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        border-radius: 32px;
+        margin: 40px auto;
+        max-width: 90%;
+        position: relative;
+        overflow: hidden;
+    }
 
-.feature-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-    border-color: #dbeafe;
-}
-
-/* Feature title */
-.feature-card h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #111827;
-}
-
-/* Feature text */
-.feature-card p {
-    font-size: 14px;
-    color: #6b7280;
-}
-
-/* ===== SECTION SPACING ===== */
-section {
-    padding-top: 70px;
-    padding-bottom: 70px;
-}
-
-/* ===== CONTAINER IMPROVEMENT ===== */
-.container {
-    max-width: 1100px;
-}
-
-/* ===== HOVER LINKS ===== */
-a {
-    transition: all 0.2s ease;
-}
-
-a:hover {
-    opacity: 0.9;
-}
-
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature-card {
+            padding: 24px 16px;
+        }
+        .stat-number {
+            font-size: 2rem;
+        }
+    }
 </style>
 {% endblock %}
 
-
 {% block body %}
 
-<!-- Hero Section -->
-<section class="bg-gray-100 py-16">
-    <div class="container mx-auto text-center px-6">
-
-        <h1 class="text-4xl font-bold text-gray-800 hero-title">
+<!-- Hero Section with gradient background -->
+<section class="hero-section text-white py-20 md:py-28">
+    <!-- FORCED CENTERING: inline margin + padding to override any base conflicts -->
+    <div class="text-center relative z-10" style="max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem;">
+        <h1 class="text-4xl md:text-6xl font-extrabold hero-title mb-4">
             Welcome to MediSlot
         </h1>
-
-        <p class="text-gray-600 mt-4">
-            Book doctor appointments easily and manage your health in one place.
+        <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto hero-subtitle">
+            Book doctor appointments instantly, manage your health records, and get timely reminders — all in one smart platform.
         </p>
-
-        <div class="mt-6 space-x-4">
-
-            <a href="#"
-               class="bg-blue-600 text-white px-6 py-2 rounded btn-glow hover:bg-blue-700">
+        <div class="mt-8 space-x-4 hero-buttons">
+            <a href="{% url 'doctor:doctor_search'%}" class="btn-primary inline-block">
                 Find Doctors
             </a>
-
-            <a href="#"
-               class="bg-gray-800 text-white px-6 py-2 rounded hover:bg-black">
+            <a href="#" class="btn-outline inline-block">
                 Book Appointment
             </a>
-
         </div>
-
     </div>
 </section>
 
 <!-- Features Section -->
-<section class="py-16">
-    <div class="container mx-auto px-6 grid md:grid-cols-3 gap-8 text-center">
-
-        <div class="p-6 shadow rounded feature-card">
-            <h3 class="text-xl font-bold">Easy Booking</h3>
-            <p class="text-gray-600 mt-2">
-                Book doctor slots in seconds.
-            </p>
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-blue-600 font-semibold text-sm uppercase tracking-wide">Why choose us</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mt-2">Smart healthcare at your fingertips</h2>
+            <p class="text-gray-500 mt-4">Streamlined appointment booking, real-time availability, and seamless patient experience.</p>
         </div>
 
-        <div class="p-6 shadow rounded feature-card">
-            <h3 class="text-xl font-bold">Real-Time Slots</h3>
-            <p class="text-gray-600 mt-2">
-                Live availability updates.
-            </p>
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Easy Booking -->
+            <div class="feature-card text-center">
+                <div class="feature-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <h3>Easy Booking</h3>
+                <p>Find and book doctor appointments in under 30 seconds with our intuitive interface.</p>
+            </div>
+            <!-- Real-Time Slots -->
+            <div class="feature-card text-center">
+                <div class="feature-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3>Real-Time Slots</h3>
+                <p>Live availability updates from doctors' schedules — no double bookings.</p>
+            </div>
+            <!-- Notifications -->
+            <div class="feature-card text-center">
+                <div class="feature-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </div>
+                <h3>Smart Notifications</h3>
+                <p>Instant SMS/email alerts for booking confirmations and appointment reminders.</p>
+            </div>
         </div>
-
-        <div class="p-6 shadow rounded feature-card">
-            <h3 class="text-xl font-bold">Notifications</h3>
-            <p class="text-gray-600 mt-2">
-                Instant booking alerts.
-            </p>
-        </div>
-
     </div>
 </section>
+
+<!-- Statistics / Impact Section -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="stat-card">
+                <div class="stat-number">500+</div>
+                <p class="text-gray-600 font-medium mt-1">Verified Doctors</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">10k+</div>
+                <p class="text-gray-600 font-medium mt-1">Happy Patients</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">30+</div>
+                <p class="text-gray-600 font-medium mt-1">Specialities</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <p class="text-gray-600 font-medium mt-1">Online Support</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<div class="cta-section max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="py-12 px-4 md:py-16 text-center text-white">
+        <h3 class="text-2xl md:text-3xl font-bold">Ready to take control of your health?</h3>
+        <p class="text-blue-100 mt-2 mb-6">Join thousands of patients who trust MediSlot for their healthcare needs.</p>
+        <a href="#" class="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-full font-semibold transition shadow-lg inline-block">
+            Get Started
+        </a>
+    </div>
+</div>
 
 {% endblock %}

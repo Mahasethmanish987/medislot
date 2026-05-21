@@ -11,7 +11,6 @@ class UserManager(BaseUserManager):
             first_name: str, 
             last_name: str, 
             phone_number: str, 
-            role: int , 
             password: str = None
             ) -> 'User':
         if not email:
@@ -24,8 +23,6 @@ class UserManager(BaseUserManager):
             raise ValueError("Users must have a last name")
         if not phone_number:
             raise ValueError("Users must have a phone number")
-        if not role:
-            raise ValueError("Users must have a role")
 
         user = self.model(
             email=self.normalize_email(email),
@@ -33,8 +30,8 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             phone_number=phone_number,
-            role=role
         )
+        user.is_active = True
         user.set_password(password)
         user.save()
         return user
@@ -46,7 +43,6 @@ class UserManager(BaseUserManager):
             first_name: str,
             last_name: str,
             phone_number: str,
-            role: int,
             password: str = None
     ) -> 'User':
         user = self.create_user(
@@ -55,7 +51,6 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             phone_number=phone_number,
-            role=role,
             password=password
         )
         user.is_staff = True
@@ -74,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     first_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
-    role = models.PositiveSmallIntegerField(choices=CHOICES)
+    role = models.PositiveSmallIntegerField(choices=CHOICES,blank=True, null=True)
     modified_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)

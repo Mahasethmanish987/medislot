@@ -1,0 +1,97 @@
+{% load static %}
+
+<div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden border border-gray-100 hover:border-blue-200 group">
+    <div class="p-4">
+        <!-- Doctor Header with larger photo -->
+        <div class="flex items-start gap-4">
+            <!-- Photo Area - bigger now -->
+            <div class="flex-shrink-0">
+                {% if doctor.profile_pic %}
+                    <img src="{{ doctor.profile_pic.url }}" alt="Dr. {{ doctor.user.get_full_name }}" 
+                         class="w-16 h-16 rounded-full object-cover border-2 border-blue-100 group-hover:border-blue-400 transition">
+                {% else %}
+                    <!-- Default doctor silhouette placeholder -->
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-gray-500 border-2 border-gray-200">
+                        <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Doctor Info - adjusted for larger photo -->
+            <div class="flex-1">
+                <h3 class="font-semibold text-base text-gray-800 group-hover:text-blue-600 transition leading-tight">
+                    Dr. {{ doctor.user.get_full_name|default:doctor.user.first_name }}
+                </h3>
+                <p class="text-xs text-blue-600 font-medium mt-0.5">
+                    {{ doctor.department.name|default:"General Medicine" }}
+                </p>
+                <div class="flex items-center gap-1 mt-1">
+                    <div class="flex items-center">
+                        <svg class="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                        </svg>
+                        <svg class="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                        </svg>
+                        <svg class="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                        </svg>
+                        <svg class="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                        </svg>
+                        <svg class="w-3 h-3 text-gray-300 fill-current" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-400">(128 reviews)</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Doctor Details (unchanged compact spacing) -->
+        <div class="mt-3 space-y-1.5">
+            {% if doctor.qualification %}
+            <div class="flex items-start gap-1.5 text-xs">
+                <svg class="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+                <span class="text-gray-600 truncate">{{ doctor.qualification|truncatechars:35 }}</span>
+            </div>
+            {% endif %}
+            
+            {% if doctor.experience_years %}
+            <div class="flex items-start gap-1.5 text-xs">
+                <svg class="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="text-gray-600">{{ doctor.experience_years }} years exp</span>
+            </div>
+            {% endif %}
+            
+            <!-- Consultation Fee and Badge -->
+            <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+                <div>
+                    <span class="text-xs text-gray-400">Fee</span>
+                    <p class="text-base font-bold text-gray-800">${{ doctor.consultation_fee|default:"50" }}</p>
+                </div>
+                <span class="px-2 py-0.5 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                    Available
+                </span>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="mt-3 flex gap-2">
+            <a href="{% url 'doctor:doctor_public_profile' doctor.id %}" 
+               class="flex-1 text-center px-2 py-1.5 text-xs text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition font-medium">
+                Profile
+            </a>
+            <a href="#" 
+               class="flex-1 text-center px-2 py-1.5 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium shadow-sm">
+                Book
+            </a>
+        </div>
+    </div>
+</div>
