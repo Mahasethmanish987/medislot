@@ -24,7 +24,7 @@ pipeline {
         stage('Create .env.prod') {
             steps {
                 // Inject the secret file (uploaded in Jenkins credentials) and copy it as .env.prod
-                withCredentials([file(credentialsId: 'env-prod-file', variable: 'ENV_FILE')]) {
+                withCredentials([file(credentialsId: 'evd-prod-file', variable: 'ENV_FILE')]) {
                     script {
                         sh "cp $ENV_FILE .env.prod"
                     }
