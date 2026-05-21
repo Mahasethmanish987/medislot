@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     // Single command: recreate containers with the new image
-                    sh "docker-compose -f ${COMPOSE_FILE} -p ${PROJECT_NAME} up -d --force-recreate"
+                    sh "docker compose -f ${COMPOSE_FILE} -p ${PROJECT_NAME} up -d --force-recreate"
                 }
             }
         }
