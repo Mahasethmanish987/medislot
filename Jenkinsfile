@@ -6,17 +6,33 @@ pipeline {
         IMAGE_NAME = 'my-app'
         IMAGE_TAG = 'latest'
         COMPOSE_FILE = 'docker-compose.prod.yml'
-        PROJECT_NAME = 'myapp'   // Used for docker-compose project isolation
+        PROJECT_NAME = 'myapp'           // used for container naming and isolation
     }
 
     stages {
-       
+        stage('Checkout') {
+            steps {
+                // Fetch the latest code from your Git repository
+                git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image using the Dockerfile in the repo root
+                    // Build the image using the Dockerfile in the repository root
                     docker.build("${IMAGE_NAME}:${IMAGE_TAG}", ".")
+                }
+            }
+        }
+
+        stage('Create .env.prod') {
+            steps {
+                // Inject the secret file (uploaded in Jenkins credentials) and copy it as .env.prod
+                withCredentials([file(credentialsId: 'env-prod-file', variable: 'ENV_FILE')]) {
+                    script {
+                        sh "cp $ENV_FILE .env.prod"
+                    }
                 }
             }
         }
@@ -24,12 +40,8 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    // Bring down existing containers (optional, but ensures clean state)
-                    sh "docker-compose -f ${COMPOSE_FILE} -p ${PROJECT_NAME} down --remove-orphans || true"
-
-                    // Bring up new containers in detached mode
-                    // This will use the image we just built (if compose references it)
-                    sh "docker-compose -f ${COMPOSE_FILE} -p ${PROJECT_NAME} up -d"
+                    // Single command: recreate containers with the new image
+                    sh "docker-compose -f ${COMPOSE_FILE} -p ${PROJECT_NAME} up -d --force-recreate"
                 }
             }
         }
@@ -37,7 +49,6 @@ pipeline {
 
     post {
         failure {
-            // Optional: send notifications or log errors
             echo "Pipeline failed! Check the logs."
         }
         success {
