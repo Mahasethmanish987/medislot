@@ -10,12 +10,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Fetch the latest code from your Git repository
-                git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
-            }
-        }
+        
 
         stage('Build Docker Image') {
             steps {
