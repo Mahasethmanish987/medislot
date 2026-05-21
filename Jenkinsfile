@@ -5,9 +5,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    docker.build("my-app:latest", ".")
-                }
+                  sh "docker build -t my-app:latest ."
             }
         }
 
@@ -21,7 +19,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh "docker compose -f docker-compose.prod.yml up -d --force-recreate"
+                sh "docker compose -f docker-compose.prod.yml up"
             }
         }
     }
