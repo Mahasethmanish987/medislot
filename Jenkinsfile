@@ -4,14 +4,16 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                // Build and tag the image so Docker Compose can find it
-                sh "docker build -t my-app:latest ."
+                script {
+                    // Pull latest image for cache (ignore failure on first run)
+                    sh "docker pull my-app:latest || true"
+                    sh "docker build --cache-from my-app:latest -t my-app:latest ."
+                }
             }
         }
 
         stage('Inject Environment File') {
             steps {
-                // Fix credentials ID: use the correct secret name (you had 'evd-prod-file' typo)
                 withCredentials([file(credentialsId: 'evd-prod-file', variable: 'ENV_FILE')]) {
                     sh "cp $ENV_FILE .env.prod"
                 }
@@ -20,18 +22,13 @@ pipeline {
 
         stage('Deploy with Compose') {
             steps {
-               
                 sh "docker compose -f docker-compose.prod.yml up -d --force-recreate --remove-orphans"
             }
         }
     }
 
     post {
-        success {
-            echo "✅ Deployment successful!"
-        }
-        failure {
-            echo "❌ Deployment failed. Check logs above."
-        }
+        success { echo "✅ Deployment successful!" }
+        failure { echo "❌ Deployment failed. Check logs above." }
     }
 }
