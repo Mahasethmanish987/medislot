@@ -1,2 +1,15 @@
 .env.prod
 .env.local 
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.sqlite3
+.env
+.venv
+venv/
+.git
+.gitignore
+*.log
+.DS_Store
