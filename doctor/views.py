@@ -28,11 +28,12 @@ def doctor_search(request):
     return render(request, "doctor/doctor_search.html")
 
 def doctor_dashboard(request):
+    print('hello world')
 
     current_datetime = timezone.now()
     start_time = current_datetime.replace(hour=0, minute=0, second=0, microsecond=0)
     end_time = current_datetime.replace(hour=23, minute=59, second=59, microsecond=999999)
-    
+
     return render(request, "doctor/doctor_dashboard.html")
 
 def doctor_public_profile(request, pk):
