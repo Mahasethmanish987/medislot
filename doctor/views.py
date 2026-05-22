@@ -28,15 +28,18 @@ def doctor_search(request):
     return render(request, "doctor/doctor_search.html")
 
 def doctor_dashboard(request):
+
+    current_datetime = timezone.now()
+    start_time = current_datetime.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_time = current_datetime.replace(hour=23, minute=59, second=59, microsecond=999999)
+    
     return render(request, "doctor/doctor_dashboard.html")
 
 def doctor_public_profile(request, pk):
-    """
-    Public profile page for a doctor - viewable by patients.
-    """
+
     doctor = get_object_or_404(DoctorProfile, pk=pk)
     
-    now = timezone.localtime(timezone.now())   # current local datetime (Kathmandu)
+    now = timezone.localtime(timezone.now())  
     today = now.date()
     future_date_limit = today + timedelta(days=7)
     
@@ -50,9 +53,9 @@ def doctor_public_profile(request, pk):
     available_slots = []
     for slot in slots_qs:
         if slot.date == today:
-            # Combine date and start_time into a datetime (naive, but same timezone assumption)
+           
             slot_dt = datetime.combine(today, slot.start_time)
-            # Compare with current time (both naive, but same local time)
+            
             if slot_dt > now:
                 available_slots.append(slot)
         else:
