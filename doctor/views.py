@@ -10,6 +10,9 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from datetime import datetime, timedelta
 from .models import DoctorProfile, Slot
+from django.utils import timezone
+
+from appointment.models import Appointment
 # Create your tests here.
 def get_doctor_profile(request):
 
@@ -22,19 +25,31 @@ def get_doctor_profile(request):
     page_obj = paginator.get_page(page_number)
     return render(request, "doctor/doctor_list.html", {"q":query, "page_obj": page_obj})
        
-
+def get_appointment_for_local_date_for_doctor(doctor,date): 
+    
+    return Appointment.objects.filter(doctor=doctor, date=date).order_by("start_time", "queue_number")
    
 def doctor_search(request): 
+    
     return render(request, "doctor/doctor_search.html")
 
 def doctor_dashboard(request):
-    print('hello world')
-
-    current_datetime = timezone.now()
-    start_time = current_datetime.replace(hour=0, minute=0, second=0, microsecond=0)
-    end_time = current_datetime.replace(hour=23, minute=59, second=59, microsecond=999999)
-
-    return render(request, "doctor/doctor_dashboard.html")
+    today = timezone.now().date()  # local date (e.g., Asia/Kathmandu)
+    appointments = get_appointment_for_local_date_for_doctor(
+        doctor=request.user.doctor_profile,
+        date=today
+    )
+    total_count = appointments.count()
+    completed_count = appointments.filter(status='completed').count()
+    pending_count = appointments.filter(status='pending').count()
+    context = {
+        'appointments': appointments, 
+        'total_count': total_count,
+        'completed_count': completed_count,
+        'pending_count': pending_count,
+    }
+    
+    return render(request, "doctor/doctor_dashboard.html", context)
 
 def doctor_public_profile(request, pk):
 
@@ -67,3 +82,4 @@ def doctor_public_profile(request, pk):
         'available_slots': available_slots,
     }
     return render(request, 'doctor/doctor_profile.html', context)
+

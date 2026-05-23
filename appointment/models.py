@@ -18,4 +18,4 @@ class Appointment(models.Model):
     
     class Meta: 
         ordering = ['-date', 'start_time', 'queue_number']
-        unique_together = ["doctor", "date", "start_time",'queue_number']  # prevent double booking of same slot   
+        unique_together = ["doctor", "patient","date"]   

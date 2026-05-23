@@ -1,7 +1,7 @@
 {% extends 'myapp/base.html' %}
 {% load static %}
 
-{% block title %}Dashboard | MediSlot{% endblock %}
+{% block title %}Patient Dashboard | MediSlot{% endblock %}
 
 {% block css %}
 <style>
@@ -87,12 +87,123 @@
         <!-- Main content area (right side) -->
         <div class="flex-1 bg-white rounded-xl shadow-md border border-gray-100 p-6">
             {% block dashboard_content %}
-            <div class="text-center py-8">
-                <svg class="w-16 h-16 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <h3 class="text-lg font-medium text-gray-700">Welcome to your dashboard</h3>
-                <p class="text-gray-500 text-sm mt-1">Select an option from the sidebar to get started.</p>
+            <div class="space-y-6">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Total Appointments</p>
+                            <p class="text-2xl font-bold text-gray-800">{{ total_count|default:"0" }}</p>
+                        </div>
+                        <div class="bg-blue-50 rounded-full p-3">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Completed</p>
+                            <p class="text-2xl font-bold text-green-600">{{ completed_count|default:"0" }}</p>
+                        </div>
+                        <div class="bg-green-50 rounded-full p-3">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Pending</p>
+                            <p class="text-2xl font-bold text-yellow-600">{{ pending_count|default:"0" }}</p>
+                        </div>
+                        <div class="bg-yellow-50 rounded-full p-3">
+                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Appointments List -->
+                <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                    <div class="p-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-800">Your Upcoming Appointments</h2>
+                        <p class="text-gray-500 text-sm mt-1">From {{ today_date|date:"F j, Y" }} onwards</p>
+                    </div>
+
+                    {% if appointments %}
+                        <div class="divide-y divide-gray-100">
+                            {% for apt in appointments %}
+                            <div class="p-5 hover:bg-gray-50 transition duration-150">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                    <!-- Left: doctor info -->
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-semibold text-sm flex-shrink-0">
+                                            Dr
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800">
+                                                Dr. {{ apt.doctor.user.get_full_name|default:apt.doctor.user.username }}
+                                            </h3>
+                                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500 mt-1">
+                                                <span class="flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                    {{ apt.date|date:"M d, Y" }}
+                                                </span>
+                                                <span class="flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    {{ apt.start_time|time:"g:i A" }} – {{ apt.end_time|time:"g:i A" }}
+                                                </span>
+                                                <span class="flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20h10M5 8h14M5 4h14M8 20v-6h8v6" />
+                                                    </svg>
+                                                    Queue #{{ apt.queue_number }}
+                                                </span>
+                                            </div>
+                                            <p class="text-sm text-gray-500 mt-1">{{ apt.doctor.department.name }}</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right: status + actions -->
+                                    <div class="flex flex-wrap items-center gap-2 ml-0 sm:ml-auto">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
+                                            {% if apt.status == 'completed' %}bg-green-100 text-green-800
+                                            {% elif apt.status == 'cancelled' %}bg-red-100 text-red-800
+                                            {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                            {{ apt.get_status_display }}
+                                        </span>
+                                        <button class="px-3 py-1 text-sm rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+                                            Details
+                                        </button>
+                                        {% if apt.status == 'pending' %}
+                                        <button class="px-3 py-1 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition">
+                                            Reschedule
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-12">
+                            <svg class="w-20 h-20 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <h3 class="mt-4 text-lg font-medium text-gray-700">No upcoming appointments</h3>
+                            <p class="text-gray-500 text-sm mt-1">Book your first appointment with a doctor today.</p>
+                            <a href="#" class="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                Find a Doctor
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
             {% endblock %}
         </div>

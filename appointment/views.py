@@ -5,14 +5,16 @@ from .models import Appointment
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib import messages
-
-
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 def book_appointment(request, slot_id):
     
     
     
     if request.method == 'POST':
         # Use a database transaction with row-level lock
+
+     try: 
         with transaction.atomic():
             # Lock the slot row for update (prevents concurrent modifications)
             slot = Slot.objects.select_for_update().get(pk=slot_id)
@@ -35,6 +37,10 @@ def book_appointment(request, slot_id):
             slot.save()
             messages.success(request, f"Appointment booked! Queue number: {queue_number}")
         return redirect('appointment:detail', pk=appointment.pk)
+     except Exception as e:
+         messages.error(request, f"An error occurred while booking the appointment: {str(e)}")
+         return redirect('doctor:doctor_public_profile', pk=slot.doctor.id)
+     
     slot = get_object_or_404(Slot, pk=slot_id)
     context = {
         'slot': slot,
@@ -55,3 +61,32 @@ def appointment_detail(request, pk):
     else:
         from django.http import HttpResponseForbidden
         return HttpResponseForbidden("You are not allowed to view this appointment.")   
+
+@login_required
+@require_POST
+def update_appointment_status(request, appointment_id):
+    appointment = get_object_or_404(Appointment, pk=appointment_id)
+    
+    if appointment.doctor.user != request.user:
+        return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
+    
+    new_status = request.POST.get('status')
+    if new_status not in ['pending', 'completed', 'cancelled']:
+        return JsonResponse({'success': False, 'error': 'Invalid status value'}, status=400)
+    
+    appointment.status = new_status
+    appointment.save()
+    
+    # Manually map status to display string (in case choices are missing)
+    status_display = {
+        'pending': 'Pending',
+        'completed': 'Completed',
+        'cancelled': 'Cancelled',
+    }.get(new_status, new_status.capitalize())
+    
+    return JsonResponse({
+        'success': True,
+        'new_status': new_status,
+        'new_status_display': status_display,
+        'message': f'Status updated to {status_display}'
+    })

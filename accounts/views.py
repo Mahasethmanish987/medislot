@@ -90,10 +90,10 @@ def user_dashboard(request):
     if not request.user.is_authenticated:
         messages.error(request, "You are not logged in.")
         return redirect('myapp:index')
-    return HttpResponse("User Dashboard")
+    return redirect('patient:dashboard')
 
 def doctor_dashboard(request): 
     if not request.user.is_authenticated:
         messages.error(request, "You are not logged in.")
         return redirect('myapp:index')
-    return HttpResponse("Doctor Dashboard")
+    return redirect('doctor:dashboard')

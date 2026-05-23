@@ -19,7 +19,7 @@
                             0
                         </span>
                     </a>
-                    <a class="hover:text-blue-400 transition" href="">
+                    <a class="hover:text-blue-400 transition" href="{% url 'accounts:user_dashboard' %}">
                         <i class="fas fa-user"></i>
                     </a>
                     <form method="POST" action="{% url 'accounts:user_logout' %}" class="inline">
