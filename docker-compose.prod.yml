@@ -26,7 +26,19 @@ services:
 
     depends_on:
       - db
+  redis:
+    image: redis:7-alpine
+    container_name: redis_cache
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD}   # optional password
+    env_file:
+      - .env.prod   # you can put REDIS_PASSWORD in .env.prod
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
 
+      
   nginx:
     image: nginx:latest
     container_name: nginx_server
@@ -47,3 +59,4 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
+  redis_data:

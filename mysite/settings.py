@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'accounts',
     'doctor',
     'appointment',
-    'patient'
+    'patient',
+    'notification'
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,12 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/vol/static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/vol/media'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [f'redis://:{os.environ.get("REDIS_PASSWORD")}@redis:6379/0'],  # db 0 for channels
+        },
+    },
+}
